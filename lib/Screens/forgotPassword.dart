@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:login_flutter/Screens/loginScreen.dart';
 import '../Reusable/reusable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class ForgotPassword extends StatelessWidget {
-  const ForgotPassword({super.key});
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({Key? key}) : super(key: key);
+
+  @override
+  State<ForgotPassword> createState() => _ForgotPassword();
+}
+
+class _ForgotPassword extends State<ForgotPassword> {
+  final TextEditingController _emailTextController = TextEditingController();
 
   Widget buildEmail() {
     return Column(
@@ -34,6 +43,7 @@ class ForgotPassword extends StatelessWidget {
               ]),
           height: 60,
           child: TextField(
+            controller: _emailTextController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.black87,
@@ -93,7 +103,21 @@ class ForgotPassword extends StatelessWidget {
                       SizedBox(height: 15),
                       SignInSignUpBtn(
                         "Send",
-                        onTap: signUserIn,
+                        () async {
+                          if (_emailTextController.text == "") {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(errorMessage("Enter Your Email"));
+                          } else {
+                            await FirebaseAuth.instance.sendPasswordResetEmail(
+                                email: _emailTextController.text);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),

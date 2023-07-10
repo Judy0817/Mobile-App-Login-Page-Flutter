@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../Reusable/reusable.dart';
@@ -15,7 +14,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final TextEditingController _passwordTextController = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
 
@@ -50,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ]),
           height: 60,
           child: TextField(
-            controller:_emailTextController,
+            controller: _emailTextController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.black87,
@@ -138,8 +136,9 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: const Text(
               " Forgot Password?",
-              style:
-              TextStyle(color: Colors.white,),
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
           )
         ],
@@ -153,22 +152,17 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Text(
-              "Don't have an account?",
-              style: TextStyle(color: Colors.white70)
-          ),
+          const Text("Don't have an account?",
+              style: TextStyle(color: Colors.white70)),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SignUp()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const SignUp()));
             },
-            child:
-            const Text(
+            child: const Text(
               " Sign Up",
               style:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           )
         ],
@@ -182,58 +176,46 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Text(
-              "Go to Home Page ?",
-              style: TextStyle(color: Colors.white70)
-          ),
+          const Text("Go to Home Page ?",
+              style: TextStyle(color: Colors.white70)),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const Home()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Home()));
             },
-            child:
-            const Text(
+            child: const Text(
               " Home",
               style:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           )
         ],
       ),
     );
   }
-
-
-
-  Future<void> signUserIn() async {
-    if (_emailTextController.text == "") {
-      ScaffoldMessenger.of(context).showSnackBar(
-          errorMessage("Enter Your Email")
-      );
-    }
-    else if (_passwordTextController.text == "") {
-      ScaffoldMessenger.of(context).showSnackBar(
-          errorMessage("Enter Your Password")
-      );
-    }
-    else {
-      try {
-        final credential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-            email: _emailTextController.text,
-            password: _passwordTextController.text
-        );
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
-        }
-      }
-    }
-  }
+  //
+  // Future<void> signUserIn() async {
+  //   if (_emailTextController.text == "") {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(errorMessage("Enter Your Email"));
+  //   } else if (_passwordTextController.text == "") {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(errorMessage("Enter Your Password"));
+  //   } else {
+  //     try {
+  //       final credential = await FirebaseAuth.instance
+  //           .signInWithEmailAndPassword(
+  //               email: _emailTextController.text,
+  //               password: _passwordTextController.text);
+  //     } on FirebaseAuthException catch (e) {
+  //       if (e.code == 'user-not-found') {
+  //         print('No user found for that email.');
+  //       } else if (e.code == 'wrong-password') {
+  //         print('Wrong password provided for that user.');
+  //       }
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -254,38 +236,63 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: EdgeInsets.symmetric(
                     horizontal: 25.0,
                     vertical: 120.0,
-                  ),                  child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Sign In",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 40.0,
-                        fontWeight: FontWeight.bold,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Sign In",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      SizedBox(height: 50),
+                      buildEmail(),
+                      SizedBox(height: 20),
+                      buildPassword(),
+                      SizedBox(height: 25),
+                      buildForogotPassBtn(),
+                      SizedBox(height: 25),
+                      SignInSignUpBtn("Sign In", () async {
+                        if (_passwordTextController.text == "") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              errorMessage("Enter Your Password"));
+                        } else if (_emailTextController.text == "") {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(errorMessage("Enter Your Email"));
+                        }
+                        try {
+                          final credential = await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: _emailTextController.text,
+                                  password: _passwordTextController.text);
 
-                    ),
-                    SizedBox(height: 50),
-                    buildEmail(),
-                    SizedBox(height: 20),
-                    buildPassword(),
-                    SizedBox(height: 25),
-                    buildForogotPassBtn(),
-                    SizedBox(height: 25),
-                    SignInSignUpBtn(
-                      "Sign In",
-                      onTap: signUserIn,
-                    ),
-                    SizedBox(height: 85),
-                    buildSignUpBtn(),
-                    SizedBox(height: 25),
-                     buildHomeBtn(),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Home(),
+                            ),
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'user-not-found') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                errorMessage("No user found for that email."));
+                          } else if (e.code == 'wrong-password') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                errorMessage("Wrong password provided for that user."));
+                          }
+                        }
+                      }),
+                      SizedBox(height: 85),
+                      buildSignUpBtn(),
+                      SizedBox(height: 25),
+                      buildHomeBtn(),
 
-
-                    //buildRememberMe(),
-                  ],
-                ),
+                      //buildRememberMe(),
+                    ],
+                  ),
                 ),
               )
             ],

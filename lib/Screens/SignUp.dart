@@ -12,9 +12,7 @@ class SignUp extends StatefulWidget {
   State<SignUp> createState() => _SignUp();
 }
 
-
 class _SignUp extends State<SignUp> {
-
   final TextEditingController _passwordTextController = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _userNameTextController = TextEditingController();
@@ -48,7 +46,7 @@ class _SignUp extends State<SignUp> {
               ]),
           height: 60,
           child: TextField(
-            controller:_userNameTextController ,
+            controller: _userNameTextController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.black87,
@@ -99,7 +97,7 @@ class _SignUp extends State<SignUp> {
               ]),
           height: 60,
           child: TextField(
-            controller:_emailTextController ,
+            controller: _emailTextController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.black87,
@@ -150,7 +148,7 @@ class _SignUp extends State<SignUp> {
               ]),
           height: 60,
           child: TextField(
-            controller:_passwordTextController ,
+            controller: _passwordTextController,
             obscureText: true,
             style: TextStyle(
               color: Colors.black87,
@@ -172,48 +170,43 @@ class _SignUp extends State<SignUp> {
     );
   }
 
-  Future<void> signUserUp() async {
-    if(_userNameTextController.text == ""){
-      ScaffoldMessenger.of(context).showSnackBar(
-          errorMessage("Enter Your User Name")
-      );
-    }
-    else if(_emailTextController.text == ""){
-      ScaffoldMessenger.of(context).showSnackBar(
-          errorMessage("Enter Your Email")
-      );
-    }
-    else if(_passwordTextController.text == ""){
-      ScaffoldMessenger.of(context).showSnackBar(
-          errorMessage("Enter Your Password")
-      );
-    }
-    else{
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailTextController.text,
-            password: _passwordTextController.text);
-        User? user = FirebaseAuth.instance.currentUser;
-
-        if (user!= null && !user.emailVerified) {
-          await user.sendEmailVerification();
-        }
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
-      }
-      on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          ScaffoldMessenger.of(context).showSnackBar(
-              errorMessage("Password must be at least 6 characters"));
-        } else if (e.code == 'email-already-in-use') {
-          ScaffoldMessenger.of(context).showSnackBar(
-              errorMessage("Account already exists for that email"));
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            errorMessage("User Registration Failed"));
-      }
-    }
-  }
+  // Future<void> signUserUp() async {
+  //   if (_userNameTextController.text == "") {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(errorMessage("Enter Your User Name"));
+  //   } else if (_emailTextController.text == "") {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(errorMessage("Enter Your Email"));
+  //   } else if (_passwordTextController.text == "") {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(errorMessage("Enter Your Password"));
+  //   } else {
+  //     try {
+  //       UserCredential userCredential = await FirebaseAuth.instance
+  //           .createUserWithEmailAndPassword(
+  //               email: _emailTextController.text,
+  //               password: _passwordTextController.text);
+  //       User? user = FirebaseAuth.instance.currentUser;
+  //
+  //       if (user != null && !user.emailVerified) {
+  //         await user.sendEmailVerification();
+  //       }
+  //       Navigator.push(context,
+  //           MaterialPageRoute(builder: (context) => const LoginScreen()));
+  //     } on FirebaseAuthException catch (e) {
+  //       if (e.code == 'weak-password') {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //             errorMessage("Password must be at least 6 characters"));
+  //       } else if (e.code == 'email-already-in-use') {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //             errorMessage("Account already exists for that email"));
+  //       }
+  //     } catch (e) {
+  //       ScaffoldMessenger.of(context)
+  //           .showSnackBar(errorMessage("User Registration Failed"));
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -253,10 +246,48 @@ class _SignUp extends State<SignUp> {
                       SizedBox(height: 20),
                       buildPassword(),
                       SizedBox(height: 35),
-                      SignInSignUpBtn(
-                        "Sign Up",
-                        onTap: signUserUp,
-                      ),
+                      SignInSignUpBtn("Sign Up", () async {
+                        if (_userNameTextController.text == "") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              errorMessage("Enter Your User Name"));
+                        } else if (_emailTextController.text == "") {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(errorMessage("Enter Your Email"));
+                        } else if (_passwordTextController.text == "") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              errorMessage("Enter Your Password"));
+                        } else {
+                          try {
+                            UserCredential userCredential = await FirebaseAuth
+                                .instance
+                                .createUserWithEmailAndPassword(
+                                    email: _emailTextController.text,
+                                    password: _passwordTextController.text);
+                            User? user = FirebaseAuth.instance.currentUser;
+
+                            if (user != null && !user.emailVerified) {
+                              await user.sendEmailVerification();
+                            }
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginScreen()));
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'weak-password') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  errorMessage(
+                                      "Password must be at least 6 characters"));
+                            } else if (e.code == 'email-already-in-use') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  errorMessage(
+                                      "Account already exists for that email"));
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                errorMessage("User Registration Failed"));
+                          }
+                        }
+                      }),
                     ],
                   ),
                 ),

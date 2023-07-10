@@ -3,8 +3,7 @@ import '../Screens/home.dart';
 import '../Screens/loginScreen.dart';
 
 
-Align SignInSignUpBtn(String text, {required void Function() onTap}) {
-  var onTap;
+Align SignInSignUpBtn(String text, Function() onTap) {
   return Align(
       alignment: Alignment.centerRight,
       child: GestureDetector(
@@ -131,6 +130,32 @@ SnackBar errorMessage(String msg){
     backgroundColor: Colors.transparent,
     elevation: 0,
   );
+}
+
+Align SignInSignUpBtnearlier(String text, {required void Function() onTap}) {
+  return Align(
+      alignment: Alignment.centerRight,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 150.0,
+          height: 50.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.purple,
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+      ));
 }
 
 
