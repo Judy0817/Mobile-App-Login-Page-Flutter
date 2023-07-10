@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../Screens/home.dart';
 import '../Screens/loginScreen.dart';
 
-
 Align SignInSignUpBtn(String text, Function() onTap) {
   return Align(
       alignment: Alignment.centerRight,
@@ -72,7 +71,6 @@ Widget MyDrawer(BuildContext context, String email, String name) {
                 context, MaterialPageRoute(builder: (context) => Home()));
           },
         ),
-
         ListTile(
           leading: Icon(Icons.settings),
           title: Text("Settings"),
@@ -87,8 +85,8 @@ Widget MyDrawer(BuildContext context, String email, String name) {
           leading: Icon(Icons.login),
           title: Text("Sign In"),
           onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LoginScreen()));
           },
         ),
         ListTile(
@@ -96,14 +94,12 @@ Widget MyDrawer(BuildContext context, String email, String name) {
           title: Text("LogOut"),
           onTap: () {},
         ),
-
-
       ],
     ),
   );
 }
 
-SnackBar errorMessage(String msg){
+SnackBar errorMessage(String msg) {
   return SnackBar(
     content: Container(
         padding: const EdgeInsets.all(16),
@@ -114,18 +110,19 @@ SnackBar errorMessage(String msg){
         ),
         child: Column(
           children: [
-            const Text("ERROR",
+            const Text(
+              "ERROR",
               style: TextStyle(fontSize: 16, color: Colors.black87),
             ),
             const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-            Text(msg,
-              style: const TextStyle(color: Colors.black54,fontSize: 14),
+            Text(
+              msg,
+              style: const TextStyle(color: Colors.black54, fontSize: 14),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
           ],
-        )
-    ),
+        )),
     behavior: SnackBarBehavior.fixed,
     backgroundColor: Colors.transparent,
     elevation: 0,
@@ -159,3 +156,30 @@ Align SignInSignUpBtnearlier(String text, {required void Function() onTap}) {
 }
 
 
+Widget ReusableTextField(TextInputType type, String hintText, IconData icontype,TextEditingController myController) {
+  return Container(
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+      color: Colors.black38,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    height: 60.0,
+    child: TextField(
+      controller: myController,
+      keyboardType: type,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        contentPadding: EdgeInsets.only(top: 14.0),
+        prefixIcon: Icon(
+          icontype,
+          color: Colors.white,
+        ),
+        hintText: hintText,
+        hintStyle: TextStyle(
+          color: Colors.black45,
+        ),
+      ),
+    ),
+  );
+}

@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
             color: Colors.black, borderRadius: BorderRadius.circular(8)),
         child: Center(
           child: Text(
-            "Display Record",
+            "Edit Profile",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
@@ -49,7 +49,7 @@ class _HomeState extends State<Home> {
             color: Colors.black, borderRadius: BorderRadius.circular(8)),
         child: Center(
           child: Text(
-            "View Record",
+            "View Profile Details",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
