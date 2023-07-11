@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,9 +7,12 @@ import 'package:login_flutter/Screens/viewRecord.dart';
 import '../Reusable/reusable.dart';
 
 FirebaseDatabase database = FirebaseDatabase.instance;
+User? user = FirebaseAuth.instance.currentUser;
 final firebaseApp = Firebase.app();
-final rtdb = FirebaseDatabase.instanceFor(app: firebaseApp, databaseURL: 'https://your-realtime-database-url.firebaseio.com/');
-DatabaseReference ref = FirebaseDatabase.instance.ref("User Data/");
+final rtdb = FirebaseDatabase.instanceFor(
+    app: firebaseApp,
+    databaseURL: 'https://your-realtime-database-url.firebaseio.com/');
+DatabaseReference ref = FirebaseDatabase.instance.ref("User Data/${user?.uid}");
 
 class DisplayRecord extends StatefulWidget {
   const DisplayRecord({Key? key}) : super(key: key);
@@ -18,13 +22,12 @@ class DisplayRecord extends StatefulWidget {
 }
 
 class _DisplayRecordState extends State<DisplayRecord> {
-
   final TextEditingController _fullNameTextController = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _birthdayTextController = TextEditingController();
   final TextEditingController _indexNoTextController = TextEditingController();
-  final TextEditingController _campusNameTextController = TextEditingController();
-
+  final TextEditingController _campusNameTextController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,59 +67,44 @@ class _DisplayRecordState extends State<DisplayRecord> {
                         _fullNameTextController,
                       ),
                       SizedBox(height: 10.0),
-                      ReusableTextField(
-                        TextInputType.emailAddress,
-                        "Email",
-                        Icons.email,
-                          _emailTextController
-                      ),
+                      ReusableTextField(TextInputType.emailAddress, "Email",
+                          Icons.email, _emailTextController),
                       SizedBox(height: 10.0),
-                      ReusableTextField(
-                        TextInputType.datetime,
-                        "Date of Birth",
-                        Icons.calendar_month,
-                          _birthdayTextController
-                      ),
+                      ReusableTextField(TextInputType.datetime, "Date of Birth",
+                          Icons.calendar_month, _birthdayTextController),
                       SizedBox(height: 10.0),
-                      ReusableTextField(
-                        TextInputType.text,
-                        "Index No",
-                        Icons.document_scanner,
-                          _indexNoTextController
-                      ),
+                      ReusableTextField(TextInputType.text, "Index No",
+                          Icons.document_scanner, _indexNoTextController),
                       SizedBox(height: 10.0),
-                      ReusableTextField(
-                        TextInputType.text,
-                        "Campus Name",
-                        Icons.school,
-                          _campusNameTextController
-                      ),
+                      ReusableTextField(TextInputType.text, "Campus Name",
+                          Icons.school, _campusNameTextController),
                       SizedBox(height: 10.0),
-                      SignInSignUpBtn(
-                        "Save Changes",
-                        () async {
-                          if(_fullNameTextController.text=="" || _emailTextController.text=="" || _birthdayTextController.text=="" || _indexNoTextController.text=="" || _fullNameTextController.text=="" || _campusNameTextController.text=="" ){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                errorMessage("Please Fill all details."));
-                          }else{
-                            await ref.set({
-
-                              "FullName":_fullNameTextController.text,
-                              "Email":_emailTextController.text,
-                              "Date Of Birth":_birthdayTextController.text,
-                              "Index No":_indexNoTextController.text,
-                              "Campus Name":_campusNameTextController.text,
-                            }
-                            );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ViewRecord(),
-                              ),
-                            );
-                          }
-
-                        }),
+                      SignInSignUpBtn("Save Changes", () async {
+                        if (_fullNameTextController.text == "" ||
+                            _emailTextController.text == "" ||
+                            _birthdayTextController.text == "" ||
+                            _indexNoTextController.text == "" ||
+                            _fullNameTextController.text == "" ||
+                            _campusNameTextController.text == "") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            errorMessage("Please Fill all details."),
+                          );
+                        } else {
+                          await ref.set({
+                            "FullName": _fullNameTextController.text,
+                            "Email": _emailTextController.text,
+                            "Date Of Birth": _birthdayTextController.text,
+                            "Index No": _indexNoTextController.text,
+                            "Campus Name": _campusNameTextController.text,
+                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ViewRecord(),
+                            ),
+                          );
+                        }
+                      }),
                     ],
                   ),
                 ),

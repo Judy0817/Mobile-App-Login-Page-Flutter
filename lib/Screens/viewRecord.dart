@@ -1,7 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../Reusable/reusable.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+
+FirebaseDatabase database = FirebaseDatabase.instance;
+User? user = FirebaseAuth.instance.currentUser;
+final firebaseApp = Firebase.app();
+final rtdb = FirebaseDatabase.instanceFor(app: firebaseApp, databaseURL: 'https://your-realtime-database-url.firebaseio.com/');
+final ref = FirebaseDatabase.instance.ref();
+
+//final snapshot = await ref.child('User Data/$').get();
 
 class ViewRecord extends StatefulWidget {
   const ViewRecord({Key? key}) : super(key: key);
@@ -36,6 +47,9 @@ class _ViewRecord extends State<ViewRecord> {
                       SizedBox(
                         height: 50.0,
                       ),
+                      // Text(
+                      //   "${user?.uid}",
+                      // )
                     ],
                   ),
                 ),

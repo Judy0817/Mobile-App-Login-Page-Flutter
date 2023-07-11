@@ -1,6 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../Screens/home.dart';
 import '../Screens/loginScreen.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+
+FirebaseDatabase database = FirebaseDatabase.instance;
+final firebaseApp = Firebase.app();
+final rtdb = FirebaseDatabase.instanceFor(
+    app: firebaseApp,
+    databaseURL: 'https://your-realtime-database-url.firebaseio.com/');
 
 Align SignInSignUpBtn(String text, Function() onTap) {
   return Align(

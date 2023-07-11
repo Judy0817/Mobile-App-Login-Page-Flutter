@@ -1,9 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:login_flutter/Screens/viewRecord.dart';
+import 'package:firebase_database/firebase_database.dart';
 import '../Reusable/reusable.dart';
 import 'DisplayRecord.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+FirebaseDatabase database = FirebaseDatabase.instance;
+User? user = FirebaseAuth.instance.currentUser;
+String? email = user?.email;
+String? username = user?.displayName;
+
+final firebaseApp = Firebase.app();
+final rtdb = FirebaseDatabase.instanceFor(
+    app: firebaseApp,
+    databaseURL: 'https://your-realtime-database-url.firebaseio.com/');
 
 class Home extends StatefulWidget {
   final Function()? onTap;
@@ -57,11 +69,24 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void fetchData(String userId) async {
+    await Firebase.initializeApp(); // Initialize Firebase
+
+    DatabaseReference ref = FirebaseDatabase.instance.reference();
+    DataSnapshot snapshot = await ref.child('users/$userId').get();
+
+    if (snapshot.value != null) {
+      print(snapshot.value);
+    } else {
+      print('No data available.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyappBar("Home page"),
-      drawer: MyDrawer(context,"judykaushalya3@gmail.com","Judy kaushalya"),
+      drawer: MyDrawer(context,"$email","$username"),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -87,6 +112,12 @@ class _HomeState extends State<Home> {
                         height: 50.0,
                       ),
                       ViewRecordsBtn(),
+                      SizedBox(
+                        height: 50.0,
+                      ),
+                      // Text(
+                      //     'Email: $email',
+                      // ),
                     ],
                   ),
                 ),

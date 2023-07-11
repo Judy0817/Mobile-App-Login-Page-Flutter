@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../Reusable/reusable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'loginScreen.dart';
 
 class SignUp extends StatefulWidget {
@@ -247,6 +246,9 @@ class _SignUp extends State<SignUp> {
                       buildPassword(),
                       SizedBox(height: 35),
                       SignInSignUpBtn("Sign Up", () async {
+                        String email = _emailTextController.text;
+                        String userName = _userNameTextController.text;
+
                         if (_userNameTextController.text == "") {
                           ScaffoldMessenger.of(context).showSnackBar(
                               errorMessage("Enter Your User Name"));
@@ -271,7 +273,9 @@ class _SignUp extends State<SignUp> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()));
+                                  builder: (context) => const LoginScreen(
+                                  ),
+                                ));
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'weak-password') {
                               ScaffoldMessenger.of(context).showSnackBar(
