@@ -1,9 +1,11 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../Screens/home.dart';
 import '../Screens/loginScreen.dart';
 import 'package:firebase_database/firebase_database.dart';
-
+import '../Screens/map.dart';
 
 FirebaseDatabase database = FirebaseDatabase.instance;
 final firebaseApp = Firebase.app();
@@ -81,9 +83,12 @@ Widget MyDrawer(BuildContext context, String email, String name) {
           },
         ),
         ListTile(
-          leading: Icon(Icons.settings),
-          title: Text("Settings"),
-          onTap: () {},
+          leading: Icon(Icons.map),
+          title: Text("Map"),
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Map()));
+          },
         ),
         ListTile(
           leading: Icon(Icons.phone),
@@ -100,13 +105,75 @@ Widget MyDrawer(BuildContext context, String email, String name) {
         ),
         ListTile(
           leading: Icon(Icons.logout),
-          title: Text("LogOut"),
-          onTap: () {},
+          title: Text("Sign Out"),
+          onTap: () async {
+            autherrorHandle("SignOut",context);
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => const LoginScreen(),
+            //     ));
+          },
         ),
       ],
     ),
   );
 }
+
+void autherrorHandle(String subtitle,BuildContext context){
+  showDialog(
+      context: context,
+      builder: (BuildContext ctx){
+        return AlertDialog(
+          title: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 6.0),
+                child: Image.asset(
+                  'images/warning.png',
+                  height: 22.0,
+                  width: 22.0,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(subtitle),
+              ),
+            ],
+          ),
+          content: Text("Do you wanna signout?"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context as BuildContext);
+              },
+              child: Text("Cancel",style: TextStyle(
+                color: Colors.black,
+              ),),
+            ),
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                );
+              },
+              child: Text(
+                "Ok",
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
+        );
+      });
+}
+
+
 
 SnackBar errorMessage(String msg) {
   return SnackBar(
@@ -164,8 +231,7 @@ Align SignInSignUpBtnearlier(String text, {required void Function() onTap}) {
       ));
 }
 
-
-Widget ReusableTextField(TextInputType type, String hintText, IconData icontype,TextEditingController myController) {
+Widget ReusableTextField(TextInputType type, String hintText, IconData icontype, TextEditingController myController) {
   return Container(
     alignment: Alignment.center,
     decoration: BoxDecoration(

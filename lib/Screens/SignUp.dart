@@ -267,6 +267,7 @@ class _SignUp extends State<SignUp> {
                                     password: _passwordTextController.text);
                             User? user = FirebaseAuth.instance.currentUser;
 
+
                             if (user != null && !user.emailVerified) {
                               await user.sendEmailVerification();
                             }

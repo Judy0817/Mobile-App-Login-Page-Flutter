@@ -69,18 +69,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void fetchData(String userId) async {
-    await Firebase.initializeApp(); // Initialize Firebase
-
-    DatabaseReference ref = FirebaseDatabase.instance.reference();
-    DataSnapshot snapshot = await ref.child('users/$userId').get();
-
-    if (snapshot.value != null) {
-      print(snapshot.value);
-    } else {
-      print('No data available.');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

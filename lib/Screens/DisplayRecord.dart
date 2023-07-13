@@ -12,7 +12,9 @@ final firebaseApp = Firebase.app();
 final rtdb = FirebaseDatabase.instanceFor(
     app: firebaseApp,
     databaseURL: 'https://your-realtime-database-url.firebaseio.com/');
-DatabaseReference ref = FirebaseDatabase.instance.ref("User Data/${user?.uid}");
+DatabaseReference ref = FirebaseDatabase.instance.ref("Users/${user?.uid}/");
+DatabaseReference ref1 =
+    FirebaseDatabase.instance.reference().child('Users').child(user as String);
 
 class DisplayRecord extends StatefulWidget {
   const DisplayRecord({Key? key}) : super(key: key);
